@@ -15,10 +15,12 @@ public class ClienteDao implements IntClienteDao {
     public ClienteDao(ClienteRepository cdao) {
         this.cdao = cdao;
     }
+
     @Override
     public List<Cliente> buscarTodos() {
         return cdao.findAll();
     }
+
     @Override
     public Cliente darAlta(Cliente cliente) {
 
