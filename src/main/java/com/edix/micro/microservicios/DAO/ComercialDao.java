@@ -52,5 +52,14 @@ public class ComercialDao implements IntComercialDao{
             return false;
         }
     }
+    @Override
+    public List<Comerciale> buscarPorIdCliente(int idCliente) {
+        return cdao.findByClienteId(idCliente);
+    }
+
+    @Override
+    public List<Comerciale> comercialConPedido() {
+        return cdao.conPedidos();
+    }
 }
 

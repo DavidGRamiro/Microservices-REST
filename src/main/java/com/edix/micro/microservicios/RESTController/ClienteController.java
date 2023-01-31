@@ -15,16 +15,10 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    final
+    @Autowired
     ClienteDao cdao;
-    public ClienteController(ClienteDao cdao) {
-        this.cdao = cdao;
-    }
-
-
     @Autowired
     InterfaceClienteDTOImpl cRepo;
-
 
 
     @GetMapping("/todos")
@@ -34,10 +28,12 @@ public class ClienteController {
     public Cliente buscarUnCliente(@PathVariable ("id") int idCliente){
         return cdao.buscarUno(idCliente);
     }
+
     @PostMapping("/alta")
     public Cliente altaCliente(@RequestBody Cliente cliente){
         return cdao.darAlta(cliente);
     }
+
     @DeleteMapping("/borrar/{id}")
     public String borrarCliente(@PathVariable("id") int id){
         if(cdao.eliminarCliente(id))
@@ -65,4 +61,5 @@ public class ClienteController {
             return new ResponseEntity<String>("Cliente no existe", HttpStatus.NOT_FOUND);
         return ResponseEntity.status(HttpStatus.OK).body(cdto);
     }
+
 }

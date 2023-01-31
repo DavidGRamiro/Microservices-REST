@@ -11,5 +11,7 @@ public interface IntComercialDao {
     Comerciale insertar(Comerciale comercial);
     Comerciale actualizar(Comerciale comercial);
     boolean eliminar(int idComercial);
+    List<Comerciale>buscarPorIdCliente(int idCliente);
+    List<Comerciale> comercialConPedido();
 
 }
