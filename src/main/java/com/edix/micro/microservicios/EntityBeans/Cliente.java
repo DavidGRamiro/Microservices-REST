@@ -1,12 +1,14 @@
 package com.edix.micro.microservicios.EntityBeans;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "clientes", schema = "ventasbbdd_2023")
 public class Cliente implements Serializable {
+    @Serial
     private static final long serialVersionUID = 6188126704440257670L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,28 +78,4 @@ public class Cliente implements Serializable {
         this.categoria = categoria;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", apellido1='" + apellido1 + '\'' +
-                ", apellido2='" + apellido2 + '\'' +
-                ", ciudad='" + ciudad + '\'' +
-                ", categoria=" + categoria +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cliente cliente = (Cliente) o;
-        return id.equals(cliente.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

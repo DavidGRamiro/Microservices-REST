@@ -1,6 +1,7 @@
 package com.edix.micro.microservicios.EntityBeans;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -10,7 +11,8 @@ import java.time.LocalDate;
         @Index(name = "id_comercial", columnList = "id_comercial")
 })
 public class Pedido implements Serializable {
-    private static final long serialVersionUID = -7930724401080137208L;
+    @Serial
+    private static final long serialVersionUID = 7930724401080137208L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pedido", nullable = false)
@@ -22,11 +24,11 @@ public class Pedido implements Serializable {
     @Column(name = "fecha")
     private LocalDate fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente idCliente;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_comercial", nullable = false)
     private Comerciale idComercial;
 

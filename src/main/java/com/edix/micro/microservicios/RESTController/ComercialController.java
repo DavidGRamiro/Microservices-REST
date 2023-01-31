@@ -20,8 +20,7 @@ public class ComercialController {
     @Autowired
     ComercialDao cdao;
 
-    @Autowired
-    ClienteDao cli;
+
     @GetMapping("/todos")
     public List<Comerciale> buscarTodosComerciales() {
         return cdao.buscarTodos();

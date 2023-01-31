@@ -11,7 +11,7 @@ public interface ComercialRepository extends JpaRepository<Comerciale, Integer>{
     //Devolver una lista de comerciales que han atendido pedidos de un cliente
     //que coincida por ese ID.
     @Query(
-            value = "select distinct * from Comerciales c join Pedidos p on c.id_comercial = p.id_comercial where p.id_cliente =?1",
+            value = "select  * from Comerciales c join Pedidos p on c.id_comercial = p.id_comercial where p.id_cliente =?1",
             nativeQuery = true
     )
     List<Comerciale> findByClienteId(int id);
