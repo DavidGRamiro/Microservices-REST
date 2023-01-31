@@ -38,6 +38,28 @@ A través de dichas URL, podremos gestionar las peticiones **GET,POST,PUT y DELE
 Para poder gestionar los datos de los comerciales, clientes y pedidos, hemos creado una base de datos en **MySQL**. En la base de datos, tendremos las tablas de los comerciales, clientes y pedidos. En cada una de ellas, tendremos los atributos que hemos definido en las entidades. Haremos la conexión mediante SprenBoot y generaremos las entidades a través de *JPABuddy*, extensión proporcionada por Intellij para generar las anotaciones necesarias y las relaciones entre tablas.
 
 
+### <span style="color:#cbf877">Consultas a tablas.
+Consulta a la tabla de **Clientes**
+```sql
+SELECT * FROM Clientes;
+```
+
+![Clientes query](/src/main/resources/img/clientes.jpg)
+
+Consulta a la tabla de **Comerciales**
+```sql
+SELECT * FROM Comerciales;
+```
+
+![Clientes query](/src/main/resources/img/comerciales.jpg)
+
+Consulta a la tabla de **Pedidos**
+
+```sql
+SELECT * FROM Pedidos;
+```
+![Clientes query](/src/main/resources/img/pedidos.jpg)
+
 
 
 

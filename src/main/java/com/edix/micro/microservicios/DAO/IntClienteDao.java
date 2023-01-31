@@ -9,8 +9,13 @@ import java.util.List;
 public interface IntClienteDao {
 
     List<Cliente> buscarTodos();
+
     Cliente darAlta(Cliente cliente);
+
     boolean eliminarCliente(int id);
+
     boolean modificarDatos(Cliente cliente);
+
     Cliente buscarUno(int id);
+
 }
