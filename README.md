@@ -60,6 +60,180 @@ SELECT * FROM Pedidos;
 ```
 ![Clientes query](/src/main/resources/img/pedidos.jpg)
 
+### <span style="color:#cbf877">Métodos CRUD
+
+Vamos a desarrollar una serie de métodos CRUD, para actualizar, dar de alta o modificar, los datos de un cliente, pedido o comercial.
+
+Para esta documentación, solo nos centraremos en los métodos referentes a los comerciales.
+
+* <u>DAO</u>: Esta carpeta dentro de nuestro proyecto, es la que recogerá, el interfaz y la clase que implementrá esta interfaz. En esta clase, tambien haremos referencia a la clase que extiende de JPARepository, que trae todos los métodos prefefinidos que utilizaremos.
+
+
+```java
+@Override
+ public Comerciale insertar(Comerciale comercial) {
+        try{
+            return cdao.save(comercial);
+        }catch(Exception e){
+            return null;
+        }
+    }
+```
+
+```java
+@Override
+  public Comerciale actualizar(Comerciale comercial) {
+
+    try {
+        if(buscarPorId(comercial.getId()).isPresent())
+            return cdao.save(comercial);
+    }catch(Exception e){
+        return null;
+        }
+        return comercial;
+    }
+```
+```java 
+@Override
+    public boolean eliminar(int idComercial) {
+        try{
+            cdao.deleteById(idComercial);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+```
+
+Estos son los métodos más basicos en métodos CRUD, pero dentro de cada clase, existen mas métodos como por ejemplo la búsqueda de un comercial en concreto por el ID.Para obtener más métodos, nos fijaremos en el código fuente de este proytecto en la carpeta correspondiente.
+
+* <u>Controller</u>: Nos encargaremos de definir las URL que tenemos que ejecutar en POSTMAN para ver las respuestas a la petición que lanzamos. Además, hemos incluido diferentes funcionalidades para que, en el caso de que, la petición no sea satisfactoria, nos devuelva un mensaje de error y nuestro servidor no se pare.
+
+*Alta de un comercial*
+```java
+ @PostMapping("/alta")
+    public Comerciale darALta(@RequestBody Comerciale comercial){
+      return cdao.insertar(comercial);
+    }
+```
+*Buscar un comercial por el ID*
+```java
+  @GetMapping("/uno/{id}")
+    public Optional<Comerciale> buscarComercialPorId(@PathVariable("id") int id) {
+        return cdao.buscarPorId(id);
+    }
+```
+*Eliminar un comercial*
+```java
+ @DeleteMapping("/eliminar/{id}")
+    public boolean eliminarComercial(@PathVariable("id") int id) {
+        return cdao.eliminar(id);
+    }
+```
+*Como deciamos, hemos añadido una funcionalidad extra para que, no solo devuelva el objeto de la petición, si no, que si no encuentra el objeto, nos devuelva un mensaje de error, además de modificar el HTP Status y devolver un 404 NOT_FOUND*
+
+```java
+  @GetMapping("/bycliente/{id}")
+    public ResponseEntity<?> buscarPorCliente(@PathVariable("id") int id){
+
+       List<Comerciale> lista = cdao.buscarPorIdCliente(id);
+
+       if(!lista.isEmpty())
+           return ResponseEntity.status(HttpStatus.OK).body(lista);
+       return new ResponseEntity<String>("El cliente seleccionado no tiene pedidos asignados a comercial", HttpStatus.NOT_FOUND);
+    }
+```
+
+##  <span style="color:#cbf877">Ejecuciones en *POSTMAN*
+
+Utilizamos la aplicación POSTMAN, que es la encargada de actuar como cliente.
+A través de las diferentes peticiones que generremos, nos devolverá el body de la petición en formato JSON por defecto.
+
+* <u>Petición GET</u>: Buscar todos.
+
+![GET TODOS](/src/main/resources/img/todos.jpg)
+
+**RESPONSE**
+```json
+{
+        "id": 1,
+        "nombre": "Daniel",
+        "apellido1": "Sáez",
+        "apellido2": "Vega",
+        "comision": 0.15
+    },
+    {
+        "id": 2,
+        "nombre": "Juan",
+        "apellido1": "Gómez",
+        "apellido2": "López",
+        "comision": 0.13
+    },
+    {
+        "id": 3,
+        "nombre": "Diego",
+        "apellido1": "Flores",
+        "apellido2": "Salas",
+        "comision": 0.11
+    },
+```
+* <u>Petición POST</u>: Dar ALTA
+
+Nos fijamos que hemos cambiado el VERBO HTTP. Como por parámetro recibe un objeto, en Postman, seleccionamos body y le pasamos un objeto JSON. El ID no es necesario especificarlo, por que en nuestra base de datos tenemos configurado que el ID será **AUTOINCREMENT**. En la respuesta, nos sale un ID 18, debido a las pruebas que hemos hecho.  
+
+![POST alta](/src/main/resources/img/alta.jpg)
+
+**RESPONSE**
+
+```json
+{
+    "id": 18,
+    "nombre": "David",
+    "apellido1": "Gonzalez",
+    "apellido2": "Ramiro",
+    "comision": 0.02
+}
+```
+EN este momento, podemos visualizar nuestra base de datos en MYSQL o volver hacer una peticion GET a /todos, y veremos que se ha dado de alta el nuevo comercial.
+
+* <u>Petición PUT</u>: Modificar los datos
+
+SI quisieramos modificar unos datos en concreto, utilizaremos el verbo PATCH, pero vamos a modificar todos los datos del nuevo comercial.
+
+![PUT modificiar](/src/main/resources/img/editar.jpg)
+
+En este momento, en editar, si tenemos que indiocar en el cuerpo del mensaje que usuario vamos a modificar, y lo haremos indicando la clave primaria que será el ID del comercial. En estecao, el 18.
+
+Una vez modificado, si consultamos otra vez nuestra base de datos, veremos que el usaurio que antes era David, con el ID 18, ha sido modificado por completo.
+
+**RESPONSE**
+```json
+{
+    "id":18,
+    "nombre": "Adrian",
+    "apellido1": "Martín",
+    "apellido2": "Pérez",
+    "comision": 0.08
+}
+```
+* <u>Petición DELETE</u>: Eliminar un comercial por el ID.
+
+Necesitamos pasar por parámetro en la petición que ID de comercial queremos eliminar. Esto, lo haremos en la URL.
+
+![DELETE byID](/src/main/resources/img/eliminar.jpg)
+
+**RESPONSE**
+
+La respuesta de este método la hemos configurado para que nos devuelva un mensaje , indicándonos si el proceso ha sido satisfactorio o no.
+
+En el caso de que se haya eliminado, nos aparecerá un mensaje *El cliente ha sido eliminado*
+
+En el caso de que pasemos por parámetro un ID que no existe, nos aparecerá el mensaje *No se ha podido eliminar el comercial* y nuestra aplicación no se parará.
+
+
+
+
+
 
 
 
